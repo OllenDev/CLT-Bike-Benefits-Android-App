@@ -10,6 +10,10 @@ import com.parse.ParseQuery;
  */
 @ParseClassName("Deal")
 public class Deal extends ParseObject {
+    public Deal() {
+
+    }
+
     public String getName() {
         return getString("name");
     }
