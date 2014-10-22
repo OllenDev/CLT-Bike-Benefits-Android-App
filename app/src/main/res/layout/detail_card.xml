@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
+    <it.gmariotti.cardslib.library.view.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/test_tv"/>
-
-    <!--<it.gmariotti.cardslib.library.view.CardView-->
-        <!--android:id="@+id/card_view"-->
-        <!--android:-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="12dp"-->
-        <!--android:layout_marginRight="12dp"-->
-        <!--android:layout_marginTop="12dp"/>-->
-
-</LinearLayout>
+        android:layout_margin="10dp" />
+</FrameLayout>

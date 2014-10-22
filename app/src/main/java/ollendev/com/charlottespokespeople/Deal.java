@@ -5,14 +5,16 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.Serializable;
+
 /**
  * Created by ChrisOllenburg on 7/25/14.
  */
 @ParseClassName("Deal")
-public class Deal extends ParseObject {
-    public Deal() {
+public class Deal extends ParseObject implements Serializable {
+    private static final long serialVersionUID = 0L;
 
-    }
+    public Deal() { }
 
     public String getName() {
         return getString("name");
