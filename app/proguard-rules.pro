@@ -19,3 +19,6 @@
 -dontwarn icepick.**
 -keep class **$$Icicle { *; }
 -keepnames class * { @icepick.Icicle *;}
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+-keepnames class * { @butterknife.InjectView *;}

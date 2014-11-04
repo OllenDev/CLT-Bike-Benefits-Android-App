@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ollendev.com.charlottespokespeople.PreferredStickerSellerActivity">
+    <item android:id="@+id/go_to_deals" android:title="@string/deals"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>

@@ -1,13 +1,18 @@
 package ollendev.com.charlottespokespeople;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -18,13 +23,12 @@ import com.parse.ParseQuery;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.WeakHashMap;
 
 import static android.support.v4.view.ViewPager.OnPageChangeListener;
 
-public class HomeActivity extends FragmentActivity implements OnPageChangeListener {
+public class MapActivity extends FragmentActivity implements OnPageChangeListener {
 
-    private static final String TAG = HomeActivity.class.getSimpleName();
+    private static final String TAG = MapActivity.class.getSimpleName();
 
 //    // Fields for helping process mapFragment and location changes
     private HashMap<Marker, String> mMarkers; // TODO test this and make sure it's not a memory leak or manually null it out
@@ -42,7 +46,7 @@ public class HomeActivity extends FragmentActivity implements OnPageChangeListen
 
         userSelectedMarker = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_map);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mMap = mapFragment.getMap();
         mMap.setMyLocationEnabled(true);
@@ -50,24 +54,6 @@ public class HomeActivity extends FragmentActivity implements OnPageChangeListen
         LatLng myLocation = new LatLng(35.227406, -80.838959);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 11.0f));
         mMarkers = new HashMap<Marker, String>();
-//        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//            @Override
-//            public void onInfoWindowClick(Marker marker) {
-//                String objectId = mMarkers.get(marker);
-//                if (objectId != null) {
-//                    ParseQuery<Deal> dealParseQuery = Deal.getQuery();
-//                    try {
-//                        Deal deal = dealParseQuery.get(objectId);
-//
-//                        int index =  mDeals.indexOf(deal);
-//                        mPager.setCurrentItem(index);
-//
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -83,10 +69,63 @@ public class HomeActivity extends FragmentActivity implements OnPageChangeListen
             }
         });
 
-        doMapQuery();
-
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setOnPageChangeListener(this);
+
+        mDeals = DealManager.getInstance().getDeals();
+        if (mDeals == null) {
+            doMapQuery();
+        } else {
+            // TODO make a method to combine dup logic
+            CardAdapter adapter = new CardAdapter(getSupportFragmentManager());
+            adapter.mDeals = mDeals;
+            DealManager.getInstance().setDeals(mDeals);
+            mPager.setAdapter(adapter);
+
+            // Loop through the results of the search
+            BitmapDescriptor bitmapDescriptor =  BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            for (Deal deal : mDeals) {
+                // Set up the mapFragment marker's location
+                MarkerOptions markerOpts =
+                        new MarkerOptions().position(new LatLng(deal.getLocation().getLongitude(), deal
+                                .getLocation().getLatitude()));
+
+                // Display a green marker with the post information
+                markerOpts = markerOpts.title(deal.getName()).icon(bitmapDescriptor);
+                // Add a new marker
+                Marker marker = mapFragment.getMap().addMarker(markerOpts);
+                mMarkers.put(marker, deal.getObjectId());
+                if (deal.getObjectId().equals(selectedObjectId)) {
+                    marker.showInfoWindow();
+                    selectedObjectId = null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_map, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_list) {
+            Intent intent = new Intent(this, ListActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /*
@@ -106,6 +145,7 @@ public class HomeActivity extends FragmentActivity implements OnPageChangeListen
                 CardAdapter adapter = new CardAdapter(getSupportFragmentManager());
                 adapter.mDeals = objects;
                 mDeals = objects;
+                DealManager.getInstance().setDeals(mDeals);
                 mPager.setAdapter(adapter);
 
                 if (e != null) {
