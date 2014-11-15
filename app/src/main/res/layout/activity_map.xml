@@ -16,6 +16,6 @@
         android:id="@+id/pager"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="171dp"/>
 
 </RelativeLayout>

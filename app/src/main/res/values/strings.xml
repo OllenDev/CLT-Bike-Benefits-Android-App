@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Charlotte Spokes People</string>
+    <string name="app_name">Charlotte Bike Benefits</string>
     <string name="hello_world">Hello Android Studio!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_list">ListActivity</string>
-    <string name="title_activity_intro">Instructions</string>
     <string name="instructions">Instructions:</string>
     <string name="instructions_body">1). Get a bike (don\'t steal it!)\n2).Get a helmet.\n3). Get a sticker.\n4). Ride your bike to a store that supports bike benefits.\n5).Show your sticker to get the deal.</string>
     <string name="show_me_the_deals">Show me the deals</string>
     <string name="showMeWhereToGetASticker">Show Me Where to Get a Sticker</string>
     <string name="title_activity_preferred_sticker_seller">Preferred Sticker Seller</string>
     <string name="deals">Deals</string>
+    <string name="test_deal_text">5% off your purchase</string>
+    <string name="test_company_name">World of Beer</string>
 
 </resources>
